@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
+const cookieParser = require("cookie-parser");
 // Load env vars
 dotenv.config({ path: "./config/config.env" });
 // Logger
@@ -15,7 +16,11 @@ const auth = require("./routes/auth");
 // Connect to DB
 connectDB();
 const app = express();
+// Body parser
 app.use(express.json());
+// Cookie parser
+app.use(cookieParser());
+
 // Log in Dev mode
 if (process.env.NODE_ENV == "development") {
   app.use(morgan("dev"));
