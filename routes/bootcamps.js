@@ -14,6 +14,7 @@ const courseRouter = require("./courses");
 
 // Re-route into other resource routers
 router.use("/:bootcampId/courses", courseRouter);
+// -------------------------------
 router.get("/", getBootcamps);
 router.post("/", createBootcamp);
 router.get("/:id", getBootcamp);
