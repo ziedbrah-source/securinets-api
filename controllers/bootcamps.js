@@ -7,13 +7,28 @@ const ErrorResponse = require("../utils/errorResponse");
 // @access Public
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
   let query;
-  let queryStr = JSON.stringify(req.query);
+  const reqQuery = { ...req.query };
+
+  // Fields to exclude
+  const removeFields = ["select"];
+
+  // loop over removeFields and delete them from reqQuery
+  removeFields.forEach((param) => delete reqQuery[param]);
+  let queryStr = JSON.stringify(reqQuery);
+  // create operators ($gt,$gte,etc..)
   queryStr = queryStr.replace(
     /\b(gt|gte|lt|lte|in)\b/g,
     (match) => `$${match}`
   );
-  query = Bootcamp.find(JSON.parse(queryStr)).populate("courses");
 
+  // Finding ressource
+  query = Bootcamp.find(JSON.parse(queryStr)).populate("courses");
+  //select Fields
+  if (req.query.select) {
+    // we send it as select=name,desciption , we will transform it to name description
+    const fields = req.query.select.split(",").join(" ");
+    query = query.select(fields);
+  }
   const bootcamps = await query;
   res
     .status(200)
