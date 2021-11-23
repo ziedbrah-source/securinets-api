@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
@@ -6,6 +7,7 @@ const cookieParser = require("cookie-parser");
 dotenv.config({ path: "./config/config.env" });
 // Logger
 const morgan = require("morgan");
+const fileupload = require("express-fileupload");
 // ErrorHandler
 const errorHandler = require("./middleware/error");
 // Route files
@@ -25,6 +27,11 @@ app.use(cookieParser());
 if (process.env.NODE_ENV == "development") {
   app.use(morgan("dev"));
 }
+
+// File upload middleware
+app.use(fileupload());
+// Set static folder
+app.use(express.static(path.join(__dirname, "public")));
 // Mount Routers
 app.use("/api/v1/bootcamps", bootcamps);
 app.use("/api/v1/courses", courses);
