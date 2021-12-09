@@ -12,7 +12,7 @@ exports.getEvents = asyncHandler(async (req, res, next) => {
 // @desc Get single Event
 // @route Get /api/v1/events/:id
 // @access Private
-exports.getEvetn = asyncHandler(async (req, res, next) => {
+exports.getEvent = asyncHandler(async (req, res, next) => {
   const event = await Event.findById(req.params.id);
   if (!event) {
     return next(
@@ -24,7 +24,7 @@ exports.getEvetn = asyncHandler(async (req, res, next) => {
 // @desc create event
 // @route Post /api/v1/events/
 // @access Private
-exports.createBootcamp = asyncHandler(async (req, res, next) => {
+exports.createEvent = asyncHandler(async (req, res, next) => {
   //Check if the creator is a publisher
   if (req.user.role != "publisher") {
     return next(
