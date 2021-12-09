@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
-const geocoder = require("../utils/geocoder");
 
-const BootcampSchema = new mongoose.Schema({
+const EventSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Please add a name"],
@@ -38,41 +37,12 @@ const BootcampSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please add an address"],
   },
-  location: {
-    // GeoJSON Point
-    type: {
-      type: String,
-      enum: ["Point"],
-    },
-    coordinates: {
-      type: [Number],
-      index: "2dsphere",
-    },
-    formattedAddress: String,
-    street: String,
-    city: String,
-    state: String,
-    zipcode: String,
-    country: String,
-  },
-  careers: {
-    // Array of strings
-    type: [String],
-    required: true,
-    enum: [
-      "Web Development",
-      "Mobile Development",
-      "UI/UX",
-      "Data Science",
-      "Business",
-      "Other",
-    ],
-  },
   averageRating: {
     type: Number,
     min: [1, "Rating must be at least 1"],
     max: [10, "Rating must can not be more than 10"],
   },
+  averageCost: Number,
   photo: {
     type: String,
     default: "no-photo.jpg",
@@ -88,4 +58,10 @@ const BootcampSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Bootcamp", BootcampSchema);
+// Create bootcamp slug from the name
+BootcampSchema.pre("save", function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+
+module.exports = mongoose.model("Event", EventSchema);
