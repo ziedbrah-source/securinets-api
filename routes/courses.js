@@ -9,6 +9,7 @@ const {
   updateCourse,
   deleteCourse,
 } = require("../controllers/courses");
+const { protect, authorize } = require("../middleware/auth");
 router.get(
   "/",
   advancedResults(Course, {
@@ -17,10 +18,9 @@ router.get(
   }),
   getCourses
 );
-router.post("/", addCourse);
-router.post("/", addCourse);
+router.post("/", protect, authorize("publisher", "admin"), addCourse);
 router.get("/:id", getCourse);
-router.put("/:id", updateCourse);
-router.delete("/:id", deleteCourse);
+router.put("/:id", protect, authorize("publisher", "admin"), updateCourse);
+router.delete("/:id", protect, authorize("publisher", "admin"), deleteCourse);
 
 module.exports = router;

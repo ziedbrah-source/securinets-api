@@ -23,7 +23,7 @@ router.get("/", advancedResults(Bootcamp, "courses"), getBootcamps);
 router.post("/", protect, authorize("publisher", "admin"), createBootcamp);
 router.get("/:id", getBootcamp);
 router.put("/:id", protect, authorize("publisher", "admin"), updateBootcamp);
-router.put("/:id/photo", bootcampPhotoUpload);
+router.put("/:id/photo", authorize("publisher", "admin"), bootcampPhotoUpload);
 router.delete("/:id", protect, authorize("publisher", "admin"), deleteBootcamp);
 router.get("/radius/:zipcode/:distance", getBootcampsInRadius);
 
