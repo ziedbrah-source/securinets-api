@@ -3,6 +3,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const cookieParser = require("cookie-parser");
+const mongoSanitize = require("express-mongo-sanitize");
 // Load env vars
 dotenv.config({ path: "./config/config.env" });
 // Logger
@@ -31,6 +32,8 @@ if (process.env.NODE_ENV == "development") {
 
 // File upload middleware
 app.use(fileupload());
+// Sanitize data
+app.use(mongoSanitize());
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
 // Mount Routers
