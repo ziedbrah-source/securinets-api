@@ -16,8 +16,8 @@ const { protect, authorize } = require("../middleware/auth");
 
 router.use(protect);
 router.use(authorize("admin"));
-
-router.route("/").get(advancedResults(User), getUsers).post(createUser);
+// we can add advanced results middleware here for filtering.
+router.route("/").get(getUsers).post(createUser);
 
 router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
 
