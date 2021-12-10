@@ -6,6 +6,12 @@ const cookieParser = require("cookie-parser");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 const xss = require("xss-clean");
+const hpp = require("hpp");
+const cors = require("cors");
+const corsOptions = {
+  origin: "http://localhost:4200",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 // Load env vars
 dotenv.config({ path: "./config/config.env" });
 // Logger
@@ -22,6 +28,7 @@ const users = require("./routes/users");
 // Connect to DB
 connectDB();
 const app = express();
+app.use(cors(corsOptions));
 // Body parser
 app.use(express.json());
 // Cookie parser
@@ -40,6 +47,9 @@ app.use(mongoSanitize());
 app.use(helmet());
 // Prevent XSS attacks
 app.use(xss());
+// Prevent http param pollution
+app.use(hpp());
+
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
 // Mount Routers
